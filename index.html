@@ -1,18 +1,949 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="JaviEdu Bordados - Professional Textile Screen Printing, DTF Printing, and Computerized Embroidery services." />
-    <!-- Google Fonts: Inter and Outfit -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    <title>JaviEdu Bordados | Professional Printing & Embroidery</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="JaviEdu Bordados – Bordado Computarizado, Serigrafía, DTF y Confección en Ecuador" />
+  <title>JaviEdu Bordados</title>
+
+  <!-- ══════════════════════════════════════════
+       TAILWIND CSS — Framework principal
+  ══════════════════════════════════════════ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            poppins:   ['Poppins', 'sans-serif'],
+            playfair:  ['"Playfair Display"', 'serif'],
+          },
+          colors: {
+            primary:  '#7B2FBE',
+            'primary-l': '#9B59D6',
+            secondary:'#E040FB',
+            accent:   '#FFB300',
+            dark:     '#0D0D2B',
+            dark2:    '#13132E',
+          },
+          keyframes: {
+            fadeUp:   { from:{ opacity:0, transform:'translateY(28px)' }, to:{ opacity:1, transform:'translateY(0)' } },
+            fadeDown: { from:{ opacity:0, transform:'translateY(-20px)'}, to:{ opacity:1, transform:'translateY(0)' } },
+            orbDrift: { from:{ transform:'translate(0,0) scale(1)' }, to:{ transform:'translate(30px,28px) scale(1.1)' } },
+            ptRise:   { '0%':{ opacity:0, transform:'translateY(110vh) rotate(0deg)' },
+                        '5%,90%':{ opacity:.13 },
+                        '100%':{ opacity:0, transform:'translateY(-120px) rotate(720deg)' } },
+            spinSlow: { to:{ transform:'rotate(360deg)' } },
+            gradMove: { '0%,100%':{ backgroundPosition:'0% 50%' }, '50%':{ backgroundPosition:'100% 50%' } },
+            scrollBounce:{ '0%,100%':{ transform:'translateX(-50%) translateY(0)' },
+                           '50%':{ transform:'translateX(-50%) translateY(9px)' } },
+            waPulse:  { '0%,100%':{ boxShadow:'0 8px 28px rgba(37,211,102,.45)' },
+                        '50%':{ boxShadow:'0 8px 40px rgba(37,211,102,.65),0 0 0 14px rgba(37,211,102,.08)' } },
+            floatY:   { '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-10px)' } },
+          },
+          animation: {
+            'fade-up':      'fadeUp .75s ease both',
+            'fade-down':    'fadeDown .7s ease both',
+            'orb-drift':    'orbDrift 8s ease-in-out infinite alternate',
+            'pt-rise':      'ptRise 14s linear infinite',
+            'spin-slow':    'spinSlow 22s linear infinite',
+            'spin-slow-r':  'spinSlow 16s linear infinite reverse',
+            'grad-move':    'gradMove 4s ease infinite',
+            'scroll-bounce':'scrollBounce 2s ease-in-out infinite',
+            'wa-pulse':     'waPulse 2.2s ease infinite',
+            'float-y':      'floatY 6s ease-in-out infinite',
+          },
+        },
+      },
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- AOS Scroll Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- ══════════════════════════════════════════
+       CSS CUSTOM — Solo para lo que Tailwind
+       no puede hacer directamente:
+       • Gradiente de texto animado
+       • Mask-image para video difuminado
+       • Scrollbar custom
+       • Partículas flotantes
+  ══════════════════════════════════════════ -->
+  <style>
+    /* Scrollbar */
+    ::-webkit-scrollbar { width:7px }
+    ::-webkit-scrollbar-track { background:#0D0D2B }
+    ::-webkit-scrollbar-thumb { background:#7B2FBE; border-radius:4px }
+
+    /* Texto con gradiente animado */
+    .grad-text {
+      background: linear-gradient(135deg, #f093fb 0%, #7B2FBE 45%, #4facfe 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradMove 4s ease infinite;
+    }
+    .grad-text-2 {
+      background: linear-gradient(135deg, #7B2FBE 0%, #E040FB 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─── VIDEO HERO: bordes difuminados ─────────────────────────────
+     *  mask-image crea una elipse opaca en el centro que se
+     *  desvanece hacia los bordes → efecto "floating" premium
+     * ──────────────────────────────────────────────────────────────── */
+    .video-diffuse {
+      -webkit-mask-image:
+        radial-gradient(ellipse 88% 88% at 50% 50%,
+          black        45%,
+          rgba(0,0,0,.55) 68%,
+          transparent  100%);
+      mask-image:
+        radial-gradient(ellipse 88% 88% at 50% 50%,
+          black        45%,
+          rgba(0,0,0,.55) 68%,
+          transparent  100%);
+    }
+
+    /* Partículas flotantes */
+    .pt {
+      position:absolute; border-radius:50%; opacity:0;
+      animation: ptRise linear infinite;
+    }
+    .pt:nth-child(1){width:70px;height:70px;left:8%;  background:#7B2FBE; animation-duration:14s;animation-delay:0s}
+    .pt:nth-child(2){width:40px;height:40px;left:22%; background:#E040FB; animation-duration:18s;animation-delay:2s}
+    .pt:nth-child(3){width:55px;height:55px;left:38%; background:#FFB300; animation-duration:11s;animation-delay:4s}
+    .pt:nth-child(4){width:30px;height:30px;left:54%; background:#9B59D6; animation-duration:16s;animation-delay:1s}
+    .pt:nth-child(5){width:60px;height:60px;left:70%; background:#E040FB; animation-duration:13s;animation-delay:3s}
+    .pt:nth-child(6){width:45px;height:45px;left:84%; background:#7B2FBE; animation-duration:19s;animation-delay:5s}
+    .pt:nth-child(7){width:35px;height:35px;left:14%; background:#FFB300; animation-duration:12s;animation-delay:6s}
+    .pt:nth-child(8){width:50px;height:50px;left:48%; background:#9B59D6; animation-duration:15s;animation-delay:2s}
+
+    /* Gradientes de fondo reutilizables */
+    .bg-hero   { background: linear-gradient(135deg,#0D0D2B 0%,#1A0533 50%,#2D0845 100%) }
+    .bg-grad-1 { background: linear-gradient(135deg,#667eea,#764ba2) }
+    .bg-grad-2 { background: linear-gradient(135deg,#f093fb,#f5576c) }
+    .bg-grad-3 { background: linear-gradient(135deg,#4facfe,#00f2fe) }
+    .bg-grad-4 { background: linear-gradient(135deg,#43e97b,#38f9d7) }
+    .bg-grad-5 { background: linear-gradient(135deg,#f6d365,#fda085) }
+    .bg-grad-wa { background: linear-gradient(135deg,#25D366,#128C7E) }
+
+    /* Glass card */
+    .glass {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      backdrop-filter: blur(12px);
+    }
+    .glass-hover {
+      transition: all .35s cubic-bezier(.4,0,.2,1);
+    }
+    .glass-hover:hover {
+      background: rgba(123,47,190,.07);
+      border-color: rgba(123,47,190,.38);
+      transform: translateY(-8px);
+      box-shadow: 0 22px 55px rgba(123,47,190,.18);
+    }
+
+    /* Nav link underline */
+    .nav-a { position:relative; transition:color .25s }
+    .nav-a::after {
+      content:''; position:absolute; bottom:-4px; left:0;
+      width:0; height:2px;
+      background: linear-gradient(135deg,#f093fb,#f5576c);
+      border-radius:2px;
+      transition: width .3s ease;
+    }
+    .nav-a:hover::after, .nav-a.active::after { width:100% }
+
+    /* Gallery item hover */
+    .gal-item { transition: all .35s cubic-bezier(.4,0,.2,1) }
+    .gal-item:hover { transform:scale(1.04); box-shadow:0 22px 55px rgba(0,0,0,.45) }
+    .gal-item img { transition: transform .5s ease }
+    .gal-item:hover img { transform:scale(1.1) }
+
+    .gal-overlay {
+      position:absolute;inset:0;
+      background:linear-gradient(to top,rgba(13,13,43,.92) 0%,transparent 55%);
+      opacity:0; transition:opacity .35s;
+      display:flex; align-items:flex-end; padding:1.25rem;
+    }
+    .gal-item:hover .gal-overlay { opacity:1 }
+    .gal-ov-body { transform:translateY(8px); transition:transform .35s }
+    .gal-item:hover .gal-ov-body { transform:translateY(0) }
+
+    /* Social card hover glow */
+    .soc-ig:hover { border-color:rgba(225,48,108,.4)!important; box-shadow:0 8px 30px rgba(225,48,108,.2) }
+    .soc-fb:hover { border-color:rgba(24,119,242,.4)!important; box-shadow:0 8px 30px rgba(24,119,242,.2) }
+    .soc-wa:hover { border-color:rgba(37,211,102,.4)!important; box-shadow:0 8px 30px rgba(37,211,102,.2) }
+    .soc-tt:hover { border-color:rgba(255,0,80,.4)!important;  box-shadow:0 8px 30px rgba(255,0,80,.2) }
+
+    /* Separator gradient */
+    .sep { height:1px; background:linear-gradient(90deg,transparent,#7B2FBE,#E040FB,transparent) }
+
+    /* Lightbox */
+    #lightbox { transition:opacity .3s ease }
+  </style>
+</head>
+<body class="font-poppins bg-dark text-white overflow-x-hidden">
+
+<!-- ════════════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════════════ -->
+<nav id="navbar"
+     class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-[5%] py-5 transition-all duration-300">
+
+  <!-- Logo -->
+  <a href="#inicio" class="flex items-center gap-2 shrink-0">
+    <img src="public/logo.png" alt="JaviEdu Bordados logo"
+         class="h-10 w-auto object-contain"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+    <span class="grad-text font-playfair font-extrabold text-xl hidden">JaviEdu<em class="not-italic" style="-webkit-text-fill-color:#FFB300">.</em></span>
+  </a>
+
+  <!-- Desktop links -->
+  <ul id="navLinks"
+      class="hidden md:flex gap-10 list-none">
+    <li><a href="#inicio"   class="nav-a text-white/85 font-medium text-sm">Inicio</a></li>
+    <li><a href="#nosotros" class="nav-a text-white/85 font-medium text-sm">Nosotros</a></li>
+    <li><a href="#trabajos" class="nav-a text-white/85 font-medium text-sm">Trabajos</a></li>
+    <li><a href="#contacto" class="nav-a text-white/85 font-medium text-sm">Contacto</a></li>
+  </ul>
+
+  <!-- Hamburger -->
+  <button id="navToggle"
+          class="flex md:hidden flex-col gap-[5px] cursor-pointer z-[1001] p-1"
+          aria-label="Menú">
+    <span class="block w-6 h-0.5 bg-white rounded transition-all duration-300"></span>
+    <span class="block w-6 h-0.5 bg-white rounded transition-all duration-300"></span>
+    <span class="block w-6 h-0.5 bg-white rounded transition-all duration-300"></span>
+  </button>
+
+  <!-- Mobile menu -->
+  <div id="mobileMenu"
+       class="fixed inset-y-0 right-0 w-3/4 bg-dark/97 backdrop-blur-2xl border-l border-white/5
+              flex flex-col items-center justify-center gap-10
+              translate-x-full transition-transform duration-400 ease-in-out z-[1000]">
+    <a href="#inicio"   class="text-xl font-semibold text-white hover:text-secondary transition-colors nav-mobile">Inicio</a>
+    <a href="#nosotros" class="text-xl font-semibold text-white hover:text-secondary transition-colors nav-mobile">Nosotros</a>
+    <a href="#trabajos" class="text-xl font-semibold text-white hover:text-secondary transition-colors nav-mobile">Trabajos</a>
+    <a href="#contacto" class="text-xl font-semibold text-white hover:text-secondary transition-colors nav-mobile">Contacto</a>
+  </div>
+</nav>
+
+
+<!-- ════════════════════════════════════════════════
+     HERO / INICIO
+════════════════════════════════════════════════ -->
+<section id="inicio"
+         class="min-h-screen bg-hero flex items-center justify-center relative overflow-hidden
+                pt-28 pb-20 px-[5%]">
+
+  <!-- Orbes de luz de fondo -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-primary blur-[80px] opacity-20
+                -top-32 -left-32 animate-orb-drift"></div>
+    <div class="absolute w-[400px] h-[400px] rounded-full bg-secondary blur-[80px] opacity-20
+                -bottom-24 -right-20 animate-orb-drift" style="animation-delay:.8s"></div>
+    <div class="absolute w-[300px] h-[300px] rounded-full bg-accent blur-[80px] opacity-15
+                top-1/2 left-1/2 animate-orb-drift" style="animation-delay:1.4s"></div>
+  </div>
+
+  <!-- Formas geométricas giratorias -->
+  <div class="absolute top-[8%] right-[8%] w-[380px] h-[380px] rounded-full
+              border border-secondary/10 animate-spin-slow pointer-events-none"></div>
+  <div class="absolute bottom-[10%] left-[4%] w-[240px] h-[240px] rounded-full
+              border border-accent/10 animate-spin-slow-r pointer-events-none"></div>
+  <div class="absolute bottom-[18%] right-[4%] w-[180px] h-[180px] rounded-[28px]
+              border border-primary-l/10 animate-spin-slow pointer-events-none"></div>
+
+  <!-- Partículas flotantes -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="pt"></div><div class="pt"></div><div class="pt"></div>
+    <div class="pt"></div><div class="pt"></div><div class="pt"></div>
+    <div class="pt"></div><div class="pt"></div>
+  </div>
+
+  <!-- Contenido hero -->
+  <div class="relative z-10 text-center max-w-4xl mx-auto w-full">
+
+    <!-- Badge -->
+    <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6
+                border border-secondary/35 bg-primary/20 backdrop-blur-md
+                text-secondary text-[0.78rem] font-semibold uppercase tracking-[2.5px]
+                animate-fade-down">
+      ✦ Calidad &amp; Creatividad
+    </div>
+
+    <!-- Título -->
+    <h1 class="font-playfair font-extrabold leading-[1.05] mb-4
+               text-[clamp(2.8rem,7vw,5.5rem)] animate-fade-up"
+        style="animation-delay:.15s">
+      <span class="grad-text">JaviEdu</span><br>Bordados
+    </h1>
+
+    <!-- Subtítulo -->
+    <p class="text-white/60 text-[clamp(.9rem,2vw,1.05rem)] tracking-wide mb-6
+              animate-fade-up" style="animation-delay:.3s">
+      Transformamos tus ideas en prendas únicas con tecnología y pasión
+    </p>
+
+    <!-- Tags de servicios -->
+    <div class="flex flex-wrap justify-center gap-3 mb-8 animate-fade-up" style="animation-delay:.45s">
+      <span class="px-4 py-1.5 rounded-full border border-white/18 bg-white/8 text-[.78rem] font-medium backdrop-blur-sm
+                   hover:bg-primary hover:border-primary transition-all duration-300 cursor-default">Bordado Computarizado</span>
+      <span class="px-4 py-1.5 rounded-full border border-white/18 bg-white/8 text-[.78rem] font-medium backdrop-blur-sm
+                   hover:bg-primary hover:border-primary transition-all duration-300 cursor-default">Serigrafía Profesional</span>
+      <span class="px-4 py-1.5 rounded-full border border-white/18 bg-white/8 text-[.78rem] font-medium backdrop-blur-sm
+                   hover:bg-primary hover:border-primary transition-all duration-300 cursor-default">Impresión DTF</span>
+      <span class="px-4 py-1.5 rounded-full border border-white/18 bg-white/8 text-[.78rem] font-medium backdrop-blur-sm
+                   hover:bg-primary hover:border-primary transition-all duration-300 cursor-default">Confección</span>
+      <span class="px-4 py-1.5 rounded-full border border-white/18 bg-white/8 text-[.78rem] font-medium backdrop-blur-sm
+                   hover:bg-primary hover:border-primary transition-all duration-300 cursor-default">Diseño Gráfico</span>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         VIDEO HERO con bordes difuminados
+         El efecto "video-diffuse" usa CSS mask-image radial para
+         que los bordes del video se fundan con el fondo oscuro.
+    ══════════════════════════════════════════════════════════════════ -->
+    <div class="relative w-full max-w-[820px] mx-auto mb-8 animate-fade-up" style="animation-delay:.25s">
+      <video
+        src="public/video.mp4"
+        class="video-diffuse w-full rounded-3xl object-cover block shadow-[0_30px_80px_rgba(0,0,0,.5)]"
+        style="max-height:440px; min-height:240px;"
+        autoplay muted loop playsinline>
+      </video>
+      <!-- Gradiente extra en la parte inferior para integrar con el fondo -->
+      <div class="absolute inset-x-0 bottom-0 h-1/3 rounded-b-3xl
+                  bg-gradient-to-t from-[#0D0D2B]/80 to-transparent pointer-events-none"></div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="flex flex-wrap gap-4 justify-center animate-fade-up" style="animation-delay:.6s">
+      <a href="#trabajos"
+         class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-[.9rem]
+                bg-gradient-to-r from-primary to-secondary text-white
+                shadow-[0_8px_30px_rgba(123,47,190,.45)]
+                hover:-translate-y-1 hover:shadow-[0_14px_40px_rgba(123,47,190,.55)]
+                transition-all duration-300">
+        <i class="fas fa-eye"></i> Ver Nuestros Trabajos
+      </a>
+      <a href="#contacto"
+         class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-[.9rem]
+                border-2 border-white/28 text-white
+                hover:bg-white/10 hover:border-white hover:-translate-y-1
+                transition-all duration-300">
+        <i class="fas fa-paper-plane"></i> Contáctanos
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 flex flex-col items-center gap-1.5
+              text-white/40 text-[.68rem] tracking-[1.5px] uppercase
+              animate-scroll-bounce pointer-events-none">
+    <span>Desplaza</span>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════
+     NOSOTROS
+════════════════════════════════════════════════ -->
+<section id="nosotros" class="bg-dark2 py-24 px-[5%] relative overflow-hidden">
+  <!-- Glow de fondo -->
+  <div class="absolute -top-32 -right-32 w-[450px] h-[450px] rounded-full
+              bg-primary/12 blur-[100px] pointer-events-none"></div>
+
+  <!-- Header -->
+  <div class="text-center mb-16" data-aos="fade-up">
+    <span class="text-secondary text-[.75rem] font-bold tracking-[3px] uppercase block mb-3">¿Quiénes Somos?</span>
+    <h2 class="font-extrabold text-[clamp(1.9rem,4vw,3rem)] leading-[1.15] mb-4">
+      Expertos en <span class="grad-text-2">cada detalle</span>
+    </h2>
+    <p class="max-w-[580px] mx-auto text-white/60 text-[.97rem] leading-[1.75]">
+      Somos un emprendimiento apasionado por transformar prendas ordinarias en obras de arte.
+      Con tecnología de punta y dedicación artesanal, llevamos tu marca al siguiente nivel.
+    </p>
+  </div>
+
+  <!-- Tarjetas de servicios -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-20">
+
+    <div class="glass glass-hover rounded-[22px] p-8" data-aos="fade-up" data-aos-delay="80">
+      <div class="w-14 h-14 rounded-2xl bg-grad-1 flex items-center justify-center text-2xl mb-5">
+        <i class="fas fa-th"></i>
+      </div>
+      <h3 class="font-bold text-[1.05rem] mb-3">Bordado Computarizado</h3>
+      <p class="text-white/55 text-[.87rem] leading-[1.65]">Diseños precisos y duraderos digitalizados a la perfección para uniformes, gorras, chaquetas y más.</p>
+    </div>
+
+    <div class="glass glass-hover rounded-[22px] p-8" data-aos="fade-up" data-aos-delay="160">
+      <div class="w-14 h-14 rounded-2xl bg-grad-2 flex items-center justify-center text-2xl mb-5">
+        <i class="fas fa-print"></i>
+      </div>
+      <h3 class="font-bold text-[1.05rem] mb-3">Serigrafía Profesional</h3>
+      <p class="text-white/55 text-[.87rem] leading-[1.65]">Tintas vibrantes que perduran en el tiempo. Perfecta para producción en masa y diseños detallados.</p>
+    </div>
+
+    <div class="glass glass-hover rounded-[22px] p-8" data-aos="fade-up" data-aos-delay="240">
+      <div class="w-14 h-14 rounded-2xl bg-grad-3 flex items-center justify-center text-2xl mb-5">
+        <i class="fas fa-layer-group"></i>
+      </div>
+      <h3 class="font-bold text-[1.05rem] mb-3">Impresión DTF</h3>
+      <p class="text-white/55 text-[.87rem] leading-[1.65]">Transferencia directa al film para estampados full-color con detalles increíbles en cualquier tela.</p>
+    </div>
+
+    <div class="glass glass-hover rounded-[22px] p-8" data-aos="fade-up" data-aos-delay="320">
+      <div class="w-14 h-14 rounded-2xl bg-grad-4 flex items-center justify-center text-2xl mb-5">
+        <i class="fas fa-tshirt"></i>
+      </div>
+      <h3 class="font-bold text-[1.05rem] mb-3">Confección de Prendas</h3>
+      <p class="text-white/55 text-[.87rem] leading-[1.65]">Camisetas, uniformes, ropa deportiva, chaquetas y mucho más, fabricados a medida con acabados impecables.</p>
+    </div>
+
+    <div class="glass glass-hover rounded-[22px] p-8" data-aos="fade-up" data-aos-delay="400">
+      <div class="w-14 h-14 rounded-2xl bg-grad-5 flex items-center justify-center text-2xl mb-5">
+        <i class="fas fa-palette"></i>
+      </div>
+      <h3 class="font-bold text-[1.05rem] mb-3">Diseño Gráfico</h3>
+      <p class="text-white/55 text-[.87rem] leading-[1.65]">Creamos y digitalizamos diseños únicos adaptados a cada técnica de impresión y bordado.</p>
+    </div>
+  </div>
+
+  <!-- Sub-header media -->
+  <div class="text-center mb-8" data-aos="fade-up">
+    <span class="text-secondary text-[.75rem] font-bold tracking-[3px] uppercase block mb-3">Nuestro Proceso</span>
+    <h2 class="font-extrabold text-[clamp(1.9rem,4vw,3rem)] leading-[1.15]">
+      Calidad <span class="grad-text-2">que se ve</span>
+    </h2>
+  </div>
+
+  <!-- Tres imágenes principales en igual tamaño -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+    <!-- Bordado Computarizado -->
+    <div class="relative rounded-[22px] overflow-hidden aspect-[4/3]
+                border border-white/10 hover:border-primary/60 transition-all duration-300 group cursor-pointer shadow-[0_8px_40px_rgba(0,0,0,.35)]"
+         data-aos="fade-up" data-aos-delay="80">
+      <img src="public/hero_embroidery.png" alt="Bordado computarizado"
+           class="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+      <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent"></div>
+      <div class="absolute bottom-5 left-5 right-5">
+        <div class="w-8 h-8 rounded-lg bg-grad-1 flex items-center justify-center text-sm mb-2">
+          <i class="fas fa-th"></i>
+        </div>
+        <span class="text-white font-bold text-[.95rem] block">Bordado Computarizado</span>
+        <span class="text-secondary text-xs font-medium">Diseños precisos y duraderos</span>
+      </div>
+    </div>
+
+    <!-- Impresión DTF -->
+    <div class="relative rounded-[22px] overflow-hidden aspect-[4/3]
+                border border-white/10 hover:border-primary/60 transition-all duration-300 group cursor-pointer shadow-[0_8px_40px_rgba(0,0,0,.35)]"
+         data-aos="fade-up" data-aos-delay="200">
+      <img src="public/hero_dtf.png" alt="Impresión DTF"
+           class="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+      <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent"></div>
+      <div class="absolute bottom-5 left-5 right-5">
+        <div class="w-8 h-8 rounded-lg bg-grad-3 flex items-center justify-center text-sm mb-2">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <span class="text-white font-bold text-[.95rem] block">Impresión DTF</span>
+        <span class="text-secondary text-xs font-medium">Full-color en cualquier tela</span>
+      </div>
+    </div>
+
+    <!-- Serigrafía Profesional -->
+    <div class="relative rounded-[22px] overflow-hidden aspect-[4/3]
+                border border-white/10 hover:border-primary/60 transition-all duration-300 group cursor-pointer shadow-[0_8px_40px_rgba(0,0,0,.35)]"
+         data-aos="fade-up" data-aos-delay="320">
+      <img src="public/hero_screenprint.png" alt="Serigrafía profesional"
+           class="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+      <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent"></div>
+      <div class="absolute bottom-5 left-5 right-5">
+        <div class="w-8 h-8 rounded-lg bg-grad-2 flex items-center justify-center text-sm mb-2">
+          <i class="fas fa-print"></i>
+        </div>
+        <span class="text-white font-bold text-[.95rem] block">Serigrafía Profesional</span>
+        <span class="text-secondary text-xs font-medium">Tintas vibrantes y duraderas</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Stats animadas -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mt-16">
+    <div class="glass rounded-[20px] p-8 text-center hover:border-primary/40 hover:-translate-y-1 transition-all duration-300"
+         data-aos="zoom-in" data-aos-delay="80">
+      <span class="stat-n block text-5xl font-black leading-none mb-2
+                   bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent"
+            data-target="500" style="-webkit-text-fill-color:transparent">0</span>
+      <span class="text-white/55 text-[.82rem] font-medium">Clientes Satisfechos</span>
+    </div>
+    <div class="glass rounded-[20px] p-8 text-center hover:border-primary/40 hover:-translate-y-1 transition-all duration-300"
+         data-aos="zoom-in" data-aos-delay="160">
+      <span class="stat-n block text-5xl font-black leading-none mb-2
+                   bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent"
+            data-target="1000" style="-webkit-text-fill-color:transparent">0</span>
+      <span class="text-white/55 text-[.82rem] font-medium">Proyectos Completados</span>
+    </div>
+    <div class="glass rounded-[20px] p-8 text-center hover:border-primary/40 hover:-translate-y-1 transition-all duration-300"
+         data-aos="zoom-in" data-aos-delay="240">
+      <span class="stat-n block text-5xl font-black leading-none mb-2
+                   bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent"
+            data-target="5" style="-webkit-text-fill-color:transparent">0</span>
+      <span class="text-white/55 text-[.82rem] font-medium">Años de Experiencia</span>
+    </div>
+    <div class="glass rounded-[20px] p-8 text-center hover:border-primary/40 hover:-translate-y-1 transition-all duration-300"
+         data-aos="zoom-in" data-aos-delay="320">
+      <span class="stat-n block text-5xl font-black leading-none mb-2
+                   bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent"
+            data-target="100" style="-webkit-text-fill-color:transparent">0</span>
+      <span class="text-white/55 text-[.82rem] font-medium">% Satisfacción</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════
+     NUESTROS TRABAJOS
+════════════════════════════════════════════════ -->
+<section id="trabajos" class="bg-dark py-24 px-[5%] relative overflow-hidden">
+  <div class="absolute -bottom-24 -left-24 w-[420px] h-[420px] rounded-full
+              bg-secondary/8 blur-[100px] pointer-events-none"></div>
+
+  <!-- Header -->
+  <div class="text-center mb-14" data-aos="fade-up">
+    <span class="text-secondary text-[.75rem] font-bold tracking-[3px] uppercase block mb-3">Portafolio</span>
+    <h2 class="font-extrabold text-[clamp(1.9rem,4vw,3rem)] leading-[1.15] mb-4">
+      Nuestros <span class="grad-text-2">Trabajos</span>
+    </h2>
+    <p class="max-w-[580px] mx-auto text-white/60 text-[.97rem] leading-[1.75]">
+      Cada proyecto es único. Explora una muestra de nuestros mejores trabajos.
+    </p>
+  </div>
+
+  <!-- Galería sin filtros — todos por igual
+       Para agregar más fotos: copia cualquier .gal-item y cambia src -->
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-5" id="galGrid">
+
+    <div class="gal-item relative rounded-[18px] overflow-hidden aspect-square cursor-pointer border border-white/0"
+         data-aos="fade-up" data-aos-delay="60">
+      <img src="public/p1.png" alt="Trabajo JaviEdu Bordados">
+      <div class="gal-overlay">
+        <div class="gal-ov-body">
+          <h4 class="text-[.95rem] font-semibold mb-1">Trabajo 1</h4>
+          <span class="text-secondary text-[.75rem] font-semibold">JaviEdu Bordados</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gal-item relative rounded-[18px] overflow-hidden aspect-square cursor-pointer border border-white/0"
+         data-aos="fade-up" data-aos-delay="120">
+      <img src="public/p2.png" alt="Trabajo JaviEdu Bordados">
+      <div class="gal-overlay">
+        <div class="gal-ov-body">
+          <h4 class="text-[.95rem] font-semibold mb-1">Trabajo 2</h4>
+          <span class="text-secondary text-[.75rem] font-semibold">JaviEdu Bordados</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gal-item relative rounded-[18px] overflow-hidden aspect-square cursor-pointer border border-white/0"
+         data-aos="fade-up" data-aos-delay="180">
+      <img src="public/p3.png" alt="Trabajo JaviEdu Bordados">
+      <div class="gal-overlay">
+        <div class="gal-ov-body">
+          <h4 class="text-[.95rem] font-semibold mb-1">Trabajo 3</h4>
+          <span class="text-secondary text-[.75rem] font-semibold">JaviEdu Bordados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Para agregar más fotos: copia este bloque y cambia src -->
+    <div class="gal-item relative rounded-[18px] overflow-hidden aspect-square cursor-pointer glass
+                border border-dashed border-white/11 flex flex-col items-center justify-center gap-3"
+         data-aos="fade-up" data-aos-delay="240">
+      <i class="fas fa-plus text-3xl text-white/18"></i>
+      <p class="text-white/30 text-[.78rem] text-center px-4">
+        📸 Agrega tu foto aquí
+      </p>
+    </div>
+
+    <div class="gal-item relative rounded-[18px] overflow-hidden aspect-square cursor-pointer glass
+                border border-dashed border-white/11 flex flex-col items-center justify-center gap-3"
+         data-aos="fade-up" data-aos-delay="300">
+      <i class="fas fa-plus text-3xl text-white/18"></i>
+      <p class="text-white/30 text-[.78rem] text-center px-4">
+        📸 Agrega tu foto aquí
+      </p>
+    </div>
+
+    <div class="gal-item relative rounded-[18px] overflow-hidden aspect-square cursor-pointer glass
+                border border-dashed border-white/11 flex flex-col items-center justify-center gap-3"
+         data-aos="fade-up" data-aos-delay="360">
+      <i class="fas fa-plus text-3xl text-white/18"></i>
+      <p class="text-white/30 text-[.78rem] text-center px-4">
+        📸 Agrega tu foto aquí
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════
+     CONTACTO
+════════════════════════════════════════════════ -->
+<section id="contacto" class="bg-dark2 py-24 px-[5%] relative overflow-hidden">
+  <div class="sep mb-0"></div>
+
+  <!-- Header -->
+  <div class="text-center mb-16 mt-0 pt-16" data-aos="fade-up">
+    <span class="text-secondary text-[.75rem] font-bold tracking-[3px] uppercase block mb-3">Hablemos</span>
+    <h2 class="font-extrabold text-[clamp(1.9rem,4vw,3rem)] leading-[1.15] mb-4">
+      ¿Listo para tu <span class="grad-text-2">próximo proyecto</span>?
+    </h2>
+    <p class="max-w-[580px] mx-auto text-white/60 text-[.97rem] leading-[1.75]">
+      Contáctanos por cualquiera de nuestros canales y te responderemos a la brevedad.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+    <!-- Información de contacto -->
+    <div data-aos="fade-right">
+      <h3 class="text-2xl font-bold mb-3">Información de Contacto</h3>
+      <p class="text-white/58 leading-[1.75] mb-8 text-[.95rem]">
+        Atendemos pedidos personalizados, cotizaciones y consultas. ¡Escríbenos!
+      </p>
+
+      <!--
+      ╔══════════════════════════════════════════════════╗
+      ║  EDITA AQUÍ TUS DATOS DE CONTACTO              ║
+      ╚══════════════════════════════════════════════════╝
+      -->
+
+      <!-- WhatsApp — dos números -->
+      <div class="flex items-center gap-4 p-4 glass rounded-2xl mb-3
+                  hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+        <div class="w-11 h-11 rounded-xl bg-grad-wa flex items-center justify-center text-xl shrink-0">
+          <i class="fab fa-whatsapp"></i>
+        </div>
+        <div>
+          <small class="block text-white/38 text-[.7rem] uppercase tracking-wider mb-0.5">WhatsApp / Teléfono</small>
+          <a href="https://wa.me/593983145488" target="_blank"
+             class="text-white font-semibold text-[.93rem] hover:text-secondary transition-colors block">
+            0983 145 488
+          </a>
+          <a href="https://wa.me/593987967067" target="_blank"
+             class="text-white/70 font-medium text-[.88rem] hover:text-secondary transition-colors block">
+            0987 967 067
+          </a>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="flex items-center gap-4 p-4 glass rounded-2xl mb-3
+                  hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+        <div class="w-11 h-11 rounded-xl bg-grad-1 flex items-center justify-center text-xl shrink-0">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div>
+          <small class="block text-white/38 text-[.7rem] uppercase tracking-wider mb-0.5">Correo Electrónico</small>
+          <a href="mailto:JEBordados26@gmail.com"
+             class="text-white font-semibold text-[.93rem] hover:text-secondary transition-colors">
+            JEBordados26@gmail.com
+          </a>
+        </div>
+      </div>
+
+      <!-- Ubicación -->
+      <div class="flex items-center gap-4 p-4 glass rounded-2xl mb-6
+                  hover:border-primary/30 hover:bg-primary/5 transition-all duration-300">
+        <div class="w-11 h-11 rounded-xl bg-grad-2 flex items-center justify-center text-xl shrink-0">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div>
+          <small class="block text-white/38 text-[.7rem] uppercase tracking-wider mb-0.5">Ubicación</small>
+          <p class="text-white font-semibold text-[.93rem]">Sangolquí, Ecuador</p>
+        </div>
+      </div>
+
+      <!-- Horario -->
+      <div class="glass rounded-2xl p-6">
+        <h4 class="font-semibold text-[.95rem] mb-4 flex items-center gap-2">
+          <i class="fas fa-clock text-accent"></i> Horario de Atención
+        </h4>
+        <div class="flex justify-between py-2 border-b border-white/5 text-[.84rem]">
+          <span class="text-white/55">Lunes – Viernes</span>
+          <span class="font-medium text-secondary">24 horas</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5 text-[.84rem]">
+          <span class="text-white/55">Sábado</span>
+          <span class="font-medium">05:00 – 17:00</span>
+        </div>
+        <div class="flex justify-between py-2 text-[.84rem]">
+          <span class="text-white/55">Domingo</span>
+          <span class="font-medium">05:00 – 17:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Redes sociales -->
+    <div data-aos="fade-left">
+      <h3 class="text-[1.3rem] font-bold mb-6">Síguenos en Redes Sociales</h3>
+
+      <!--
+      ╔══════════════════════════════════════════════════╗
+      ║  EDITA AQUÍ TUS REDES (cambia # por tu URL)    ║
+      ╚══════════════════════════════════════════════════╝
+      -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/JEBordados26" target="_blank"
+           class="soc-ig flex items-center gap-4 p-5 rounded-[18px] border border-white/6
+                  bg-[rgba(225,48,108,.07)] hover:-translate-y-1 transition-all duration-300">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 text-white"
+               style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)">
+            <i class="fab fa-instagram"></i>
+          </div>
+          <div>
+            <span class="block font-bold text-[.93rem]">Instagram</span>
+            <span class="text-white/48 text-[.78rem]">@JEBordados26</span>
+          </div>
+        </a>
+
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/share/p/17KmagswXi/" target="_blank"
+           class="soc-fb flex items-center gap-4 p-5 rounded-[18px] border border-white/6
+                  bg-[rgba(24,119,242,.07)] hover:-translate-y-1 transition-all duration-300">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 text-white bg-[#1877F2]">
+            <i class="fab fa-facebook-f"></i>
+          </div>
+          <div>
+            <span class="block font-bold text-[.93rem]">Facebook</span>
+            <span class="text-white/48 text-[.78rem]">JE Bordados</span>
+          </div>
+        </a>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/593983145488" target="_blank"
+           class="soc-wa flex items-center gap-4 p-5 rounded-[18px] border border-white/6
+                  bg-[rgba(37,211,102,.07)] hover:-translate-y-1 transition-all duration-300">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 text-white bg-[#25D366]">
+            <i class="fab fa-whatsapp"></i>
+          </div>
+          <div>
+            <span class="block font-bold text-[.93rem]">WhatsApp</span>
+            <span class="text-white/48 text-[.78rem]">Escríbenos ahora</span>
+          </div>
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@jebordados26" target="_blank"
+           class="soc-tt flex items-center gap-4 p-5 rounded-[18px] border border-white/6
+                  bg-[rgba(255,0,80,.07)] hover:-translate-y-1 transition-all duration-300">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 text-white bg-black">
+            <i class="fab fa-tiktok"></i>
+          </div>
+          <div>
+            <span class="block font-bold text-[.93rem]">TikTok</span>
+            <span class="text-white/48 text-[.78rem]">@JEBordados26</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Mapa Google Maps -->
+      <a href="https://maps.app.goo.gl/6Wq6vzLFs5NL1buh7" target="_blank"
+         class="glass rounded-2xl mt-6 overflow-hidden block border border-white/6
+                hover:border-primary/40 transition-all duration-300 group">
+        <!-- Embed del mapa -->
+        <div class="relative w-full" style="height:200px;">
+          <iframe
+            src="https://maps.google.com/maps?q=Sangolqu%C3%AD,+Ecuador&output=embed&z=14"
+            width="100%" height="200" style="border:0; display:block;"
+            allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="grayscale group-hover:grayscale-0 transition-all duration-500">
+          </iframe>
+          <!-- Overlay con botón -->
+          <div class="absolute inset-0 bg-dark/30 group-hover:bg-dark/10 transition-all duration-300
+                      flex items-center justify-center pointer-events-none">
+          </div>
+        </div>
+        <div class="flex items-center gap-3 p-4">
+          <div class="w-9 h-9 rounded-xl bg-grad-2 flex items-center justify-center text-sm shrink-0">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div>
+            <span class="block text-white font-semibold text-[.9rem]">Ver en Google Maps</span>
+            <span class="text-white/45 text-[.75rem]">Sangolquí, Ecuador</span>
+          </div>
+          <i class="fas fa-external-link-alt text-white/30 ml-auto text-sm group-hover:text-secondary transition-colors"></i>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+<footer class="bg-[#070715] py-8 px-[5%] text-center border-t border-white/5">
+  <p class="text-white/30 text-[.82rem]">
+    © 2024 <span class="text-secondary font-semibold">JaviEdu Bordados</span>.
+    Todos los derechos reservados. Hecho con <span class="text-secondary">♥</span> en Ecuador.
+  </p>
+</footer>
+
+
+<!-- ════════════════════════════════════════════════
+     BOTÓN FLOTANTE WHATSAPP
+     Cambia 593XXXXXXXXX por tu número
+════════════════════════════════════════════════ -->
+<a href="https://wa.me/593983145488" target="_blank"
+   title="Chatea con nosotros"
+   class="fixed bottom-8 right-8 w-14 h-14 bg-grad-wa rounded-full z-[998]
+          flex items-center justify-center text-white text-2xl
+          animate-wa-pulse hover:scale-110 transition-transform duration-300">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Botón volver arriba -->
+<a href="#inicio" id="topBtn"
+   title="Volver arriba"
+   class="fixed bottom-8 left-8 w-11 h-11 rounded-full z-[998]
+          flex items-center justify-center text-white
+          bg-primary/75 backdrop-blur-md shadow-[0_4px_20px_rgba(123,47,190,.35)]
+          hover:bg-primary hover:-translate-y-1 transition-all duration-300
+          opacity-0 pointer-events-none">
+  <i class="fas fa-arrow-up"></i>
+</a>
+
+<!-- Lightbox -->
+<div id="lightbox"
+     class="fixed inset-0 bg-black/93 z-[9999] flex items-center justify-center opacity-0 pointer-events-none">
+  <button id="lbClose"
+          class="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/10 border-none text-white text-xl
+                 flex items-center justify-center cursor-pointer hover:bg-primary transition-colors duration-300">
+    <i class="fas fa-times"></i>
+  </button>
+  <img id="lbImg" src="" alt=""
+       class="max-w-[88vw] max-h-[86vh] rounded-2xl object-contain">
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════ -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+/* ── AOS ── */
+AOS.init({ duration: 750, easing: 'ease-out-cubic', once: true, offset: 50 });
+
+/* ── Navbar scroll ── */
+const navbar  = document.getElementById('navbar');
+const topBtn  = document.getElementById('topBtn');
+const sections = document.querySelectorAll('section[id]');
+const navAs   = document.querySelectorAll('.nav-a');
+
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  // Fondo navbar
+  if (y > 40) {
+    navbar.classList.add('bg-dark/96','backdrop-blur-2xl','shadow-[0_4px_30px_rgba(123,47,190,.2)]','!py-3');
+  } else {
+    navbar.classList.remove('bg-dark/96','backdrop-blur-2xl','shadow-[0_4px_30px_rgba(123,47,190,.2)]','!py-3');
+  }
+  // Botón volver arriba
+  topBtn.classList.toggle('opacity-0', y <= 500);
+  topBtn.classList.toggle('pointer-events-none', y <= 500);
+  topBtn.classList.toggle('opacity-100', y > 500);
+  // Link activo
+  let cur = '';
+  sections.forEach(s => { if (y >= s.offsetTop - 120) cur = s.id; });
+  navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+}, { passive: true });
+
+/* ── Menú hamburguesa ── */
+const navToggle   = document.getElementById('navToggle');
+const mobileMenu  = document.getElementById('mobileMenu');
+const spans       = navToggle.querySelectorAll('span');
+
+navToggle.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('translate-x-0');
+  mobileMenu.classList.toggle('translate-x-full', !open);
+  spans[0].style.transform = open ? 'translateY(7px) rotate(45deg)' : '';
+  spans[1].style.opacity   = open ? '0' : '';
+  spans[2].style.transform = open ? 'translateY(-7px) rotate(-45deg)' : '';
+});
+
+document.querySelectorAll('.nav-mobile').forEach(a => a.addEventListener('click', () => {
+  mobileMenu.classList.remove('translate-x-0');
+  mobileMenu.classList.add('translate-x-full');
+  spans.forEach(s => { s.style.transform=''; s.style.opacity=''; });
+}));
+
+/* ── Lightbox ── */
+const lightbox = document.getElementById('lightbox');
+const lbImg    = document.getElementById('lbImg');
+
+document.querySelectorAll('.gal-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const img = item.querySelector('img');
+    if (!img) return;
+    lbImg.src = img.src;
+    lightbox.classList.remove('opacity-0','pointer-events-none');
+    lightbox.classList.add('opacity-100');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+function closeLb() {
+  lightbox.classList.add('opacity-0','pointer-events-none');
+  lightbox.classList.remove('opacity-100');
+  document.body.style.overflow = '';
+}
+document.getElementById('lbClose').addEventListener('click', closeLb);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLb(); });
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeLb(); });
+
+/* ── Contadores animados ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(({ isIntersecting, target: el }) => {
+    if (!isIntersecting) return;
+    const end = +el.dataset.target;
+    const isPC = end === 100;
+    let cur = 0, step = end / (1800 / 16);
+    const t = setInterval(() => {
+      cur += step;
+      if (cur >= end) { el.textContent = end + (isPC ? '%' : '+'); clearInterval(t); }
+      else { el.textContent = Math.floor(cur) + (isPC ? '%' : '+'); }
+    }, 16);
+    obs.unobserve(el);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-n').forEach(c => obs.observe(c));
+
+/* ── Smooth scroll ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+});
+</script>
+</body>
 </html>
